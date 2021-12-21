@@ -37,7 +37,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.MapBlazorHub();
-app.MapHub<UiUpdateHub>("/up-updates");
+app.MapHub<UiUpdateHub>("/updatehub");
 app.MapFallbackToPage("/_Host");
 
 app.Run();

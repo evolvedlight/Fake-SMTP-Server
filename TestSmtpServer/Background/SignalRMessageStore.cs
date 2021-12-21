@@ -37,9 +37,16 @@ namespace TestSmtpServer.Background
             stream.Position = 0;
 
             var message = await MimeKit.MimeMessage.LoadAsync(stream, cancellationToken);
-            await _hubContext.Clients.All.SendAsync("ReceiveMessage", message.From[0].Name, message.Subject);
-            //_writer.WriteLine("Subject={0}", message.Subject);
-            //_writer.WriteLine("Body={0}", message.Body);
+
+            var newEmailMessage = new EmailMessageDto()
+            {
+                Subject = message.Subject,
+                BodyPreview = message.TextBody,
+                From = message.From.Select(x => x.Name).ToList(),
+                Date = message.Date
+            };
+
+            await _hubContext.Clients.All.SendAsync("ReceiveMessage", newEmailMessage);
 
             return SmtpResponse.Ok;
         }
